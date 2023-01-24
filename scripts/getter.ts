@@ -10,40 +10,22 @@ import dotenv from "dotenv"
 
 dotenv.config()
 
-// function initData() {
-//   const initialCounterValue = 17;
-//   return beginCell().storeUint(initialCounterValue, 64).endCell();
-// }
-
-// const initDataCell = initData(); // the function we've implemented just now
-// const initCodeCell = Cell.fromBoc(fs.readFileSync("counter.cell"))[0]; // compilation output from step 6
-
-//const newContractAddress = Address.parse("EQDRTAb0tjBt-SPhfirpm1CxnnuYzieIuQqWP-4KzJnPcCyL");
-
 const netmode = process.env.MODE
 
-callGetter();
-
 async function callGetter() {
-  let newContractAddress = Address.parse(fs.readFileSync("contract_address.txt").toString());
-  const endpoint = await getHttpEndpoint({
-    network: (netmode === "testnet" ? "testnet" : "mainnet") // or "testnet", according to your choice
-  });
-  console.log("contract address ====> " + newContractAddress);
-
-  const client = new TonClient({ endpoint });
-  let call = await client.callGetMethod(newContractAddress, "get_fee"); // newContractAddress from deploy
-  console.log(`fee value is ${call.stack.readBigNumber().toString()}`);
-
-  call = await client.callGetMethod(newContractAddress, "get_addr"); // newContractAddress from deploy
-  console.log(`admin address is ${call.stack.readAddress().toString()}`);
-
-  call = await client.callGetMethod(newContractAddress, "get_bots"); // newContractAddress from deploy
-  var dic1 = call.stack.readCell();
-  console.log(`Counter value is ${dic1.toString()}`);
-  let dicts = dic1.beginParse().loadDictDirect(Dictionary.Keys.Uint(32), Dictionary.Values.Cell());
+  try {
+    const mainContract = Address.parse(fs.readFileSync("main.txt").toString());
+    const endpoint = await getHttpEndpoint({
+      network: (netmode === "testnet" ? "testnet" : "mainnet") // or "testnet", according to your choice
+    });
+    console.log("contract address ====> " + mainContract);
   
-  console.log("Dictionary Size" + dicts.size.toString());
-
-  // call.stack.readCell().asSlice().loadDict()
+    const client = new TonClient({ endpoint });
+    const call = await client.callGetMethod(mainContract, "get_Val"); // mainContract from deploy
+    console.log(`val value is ${call.stack.readBigNumber().toString()}`);
+  } catch (error) {
+    console.log("[getter err]: ", error)
+  }
 }
+
+callGetter();
