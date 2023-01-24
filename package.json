@@ -37,6 +37,7 @@
     "compile": "npx func-js ./contracts/main.fc --boc ./contracts/main.cell",
     "deploy": "ts-node scripts/deploy.ts",
     "getter": "ts-node scripts/getter.ts",
-    "sendmsg": "ts-node scripts/sendmsg.ts"
+    "sendmsg": "ts-node scripts/sendmsg.ts",
+    "reset": "yarn compile; yarn deploy"
   }
 }

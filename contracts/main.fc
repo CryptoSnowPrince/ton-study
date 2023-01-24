@@ -19,11 +19,10 @@ _ get_Val() method_id {        ;; getter declaration - returns int as result
 }
 
 _ set_Val (int val) impure {
-  pack_state(val);
+  set_data(pack_state(val));
 }
 
 () recv_internal(int msg_value, cell in_msg, slice in_msg_body) impure {  ;; well known function signature
-  ;; var cs = in_msg.begin_parse();
   ifnot (in_msg_body.slice_empty?()) {
     int op = in_msg_body~load_uint(32);                                     ;; parse the operation type encoded in the beginning of msg body
     if (op == 1) {                                                          ;; handle op #1 = set admin
@@ -31,9 +30,11 @@ _ set_Val (int val) impure {
       set_Val(val);
       return ();
     }
-
     if (op == 2) {
-      throw(1031);
+      throw(1001);
+    }
+    else {
+      throw(1002);
     }
   }
 }
