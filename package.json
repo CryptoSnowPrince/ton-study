@@ -34,7 +34,7 @@
     "web3": "^1.7.1"
   },
   "scripts": {
-    "compile": "npx func-js ./contracts/main.fc --boc ./contracts/main.cell",
+    "compile": "npx func-js ./contracts/main.fc --boc ./contracts/main.cell; npx func-js ./contracts/called.fc --boc ./contracts/called.cell",
     "deploy": "ts-node scripts/deploy.ts",
     "getter": "ts-node scripts/getter.ts",
     "sendmsg": "ts-node scripts/sendmsg.ts",

@@ -11,14 +11,6 @@ dotenv.config()
 const netmode = process.env.MODE
 const mnemonic: string = process.env.MNEMONIC || ""
 
-async function main() {
-  try {
-    await sendMessage();
-  } catch (error) {
-    console.log("[sendmsg err]: ", error)
-  }
-}
-
 async function sendMessage() {
   const endpoint = await getHttpEndpoint({
     network: netmode == 'testnet' ? "testnet" : "mainnet" // or "testnet", according to your choice
@@ -54,6 +46,14 @@ async function sendMessage() {
   });
 
   await client.sendExternalMessage(wallet, transfer);
+}
+
+async function main() {
+  try {
+    await sendMessage();
+  } catch (error) {
+    console.log("[sendmsg err]: ", error)
+  }
 }
 
 main();

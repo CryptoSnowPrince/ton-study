@@ -1,33 +1,40 @@
 #include "stdlib.fc";
 
-(int) load_data() inline {                 ;; read function declaration - returns int as result
-  var ds = get_data().begin_parse();       ;; load the storage cell and start parsing as a slice
-  return (ds~load_uint(64));               ;; read a 64 bit unsigned int from the slice and return it
+_ unpack_state() inline_ref {
+  var ds = begin_parse(get_data());
+  var res = (ds~load_uint(32));
+  ds.end_parse();
+  return res;
 }
 
-() save_data(int testVal) impure inline {  ;; write function declaration - takes an int as arg
-  set_data(
-    begin_cell()                    ;; store the storage cell and create it with a builder 
-    .store_uint(testVal, 64)               ;; write a 64 bit unsigned int to the builder
-    .end_cell()
-  );                          ;; convert the builder to a cell
+_ pack_state(int val) inline_ref {
+  return begin_cell()
+    .store_uint(val, 32)
+  .end_cell();
 }
 
-(int) get_testVal() method_id {        ;; getter declaration - returns int as result
-  var testVal = load_data();
-  return (testVal);
+_ get_Val() method_id {        ;; getter declaration - returns int as result
+  int val = unpack_state();
+  return val;
 }
 
-() set_testVal (int newVal) impure {
-  save_data(newVal);
+_ set_Val (int val) impure {
+  set_data(pack_state(val));
 }
 
 () recv_internal(int msg_value, cell in_msg, slice in_msg_body) impure {  ;; well known function signature
-  ;; var cs = in_msg.begin_parse();
-  int op = in_msg_body~load_uint(64);                                     ;; parse the operation type encoded in the beginning of msg body
-  int newVal = in_msg_body~load_uint(64);                                     ;; parse the operation type encoded in the beginning of msg body
-  if (op == 1) {                                                          ;; handle op #1 = set admin
-    set_testVal(newVal);
-    return ();
+  ifnot (in_msg_body.slice_empty?()) {
+    int op = in_msg_body~load_uint(32);                                     ;; parse the operation type encoded in the beginning of msg body
+    if (op == 1) {                                                          ;; handle op #1 = set admin
+      int val = in_msg_body~load_uint(32);                                     ;; parse the operation type encoded in the beginning of msg body
+      set_Val(val);
+      return ();
+    }
+    if (op == 2) {
+      throw(1001);
+    }
+    else {
+      throw(1002);
+    }
   }
 }
