@@ -24,6 +24,7 @@ _ set_Val (int val) impure {
 
 () recv_internal(int msg_value, cell in_msg, slice in_msg_body) impure {  ;; well known function signature
   ifnot (in_msg_body.slice_empty?()) {
+    throw(1010);
     int op = in_msg_body~load_uint(32);                                     ;; parse the operation type encoded in the beginning of msg body
     if (op == 1) {                                                          ;; handle op #1 = set admin
       int val = in_msg_body~load_uint(32);                                     ;; parse the operation type encoded in the beginning of msg body
@@ -36,5 +37,8 @@ _ set_Val (int val) impure {
     else {
       throw(1002);
     }
+  }
+  else {
+    throw(1011);
   }
 }
