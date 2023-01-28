@@ -1,101 +1,44 @@
-import { beginCell } from "ton-core";
-import fs from "fs";
-import { mnemonicToWalletKey } from "ton-crypto";
-import { WalletContractV3R2, internal } from "ton";
-import { TonClient, SendMode, Address } from "ton";
-import { getHttpEndpoint } from "@orbs-network/ton-access"
+import TonWeb from 'tonweb';
+// import { Router, ROUTER_REVISION, ROUTER_REVISION_ADDRESS } from "@ston-fi/sdk"
 import dotenv from "dotenv"
 
 dotenv.config()
 
-const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+async () => {
+  const WALLET_ADDRESS = '' // YOUR WALLET ADDRESS HERE
+  const WALLET_SECRET = '' // YOUR WALLET SECRET HERE
 
-const netmode = process.env.MODE
-const mnemonic: string = process.env.MNEMONIC || ""
+  console.log("[===sndswap===]")
+  return;
 
-async function sendMessage() {
-  const endpoint = await getHttpEndpoint({
-    network: netmode == 'testnet' ? "testnet" : "mainnet" // or "testnet", according to your choice
-  });
-  const client = new TonClient({ endpoint });
-  const key = await mnemonicToWalletKey(mnemonic.split(" "));
-  const wallet = WalletContractV3R2.create({
-    publicKey: key.publicKey,
-    workchain: 0,
-  });
+  // const provider = new TonWeb.HttpProvider();
 
-  const mainContract = Address.parse(fs.readFileSync("main.txt").toString());
-  console.log("contract start ====> " + mainContract);
+  // const wallet = new TonWeb(provider).wallet.create({
+  //   address: WALLET_ADDRESS,
+  // });
 
-  const messageBody = beginCell().storeUint(1, 32).storeUint(55, 32).endCell(); // op with value 1 (increment)
+  // const router = new Router(provider, {
+  //   revision: ROUTER_REVISION.V1,
+  //   address: ROUTER_REVISION_ADDRESS.V1,
+  // });
 
-  const contract = client.open(wallet);
-  const seqno = await contract.getSeqno(); // get the next seqno of our wallet
-  // console.log("wallet addess  ====> " + wallet.address + "    no: " + seqno + " , SecretKey: " + key.secretKey.toString());
-  
-  const transfer = contract.createTransfer({
-    seqno,
-    messages: [
-      internal({
-        to: mainContract.toString(),
-        value: '0.01',
-        bounce: false,
-        body: messageBody
-      }),
-    ],
-    secretKey: key.secretKey,
-    sendMode: SendMode.PAY_GAS_SEPARATLY+ SendMode.IGNORE_ERRORS,
-  });
+  // // Create transaction params for swap operation
+  // // 0.5 JETTON0 to JETTON1 but not less than 0.1 JETTON1
+  // const params = await router.buildSwapTxParams({
+  //   userWalletAddress: WALLET_ADDRESS,
+  //   offerJettonAddress: 'EQDQoc5M3Bh8eWFephi9bClhevelbZZvWhkqdo80XuY_0qXv', // JETTON0
+  //   askJettonAddress: 'EQC_1YoM8RBixN95lz7odcF3Vrkc_N8Ne7gQi7Abtlet_Efi', // JETTON1
+  //   offerAmount: TonWeb.utils.toNano('0.5'),
+  //   minAskAmount: TonWeb.utils.toNano('0.1'),
+  //   queryId: new TonWeb.utils.BN(12345),
+  // });
 
-  await client.sendExternalMessage(wallet, transfer);
-}
-
-async function sendMessage2() {
-  const endpoint = await getHttpEndpoint({
-    network: netmode == 'testnet' ? "testnet" : "mainnet" // or "testnet", according to your choice
-  });
-  const client = new TonClient({ endpoint });
-  const key = await mnemonicToWalletKey(mnemonic.split(" "));
-  const wallet = WalletContractV3R2.create({
-    publicKey: key.publicKey,
-    workchain: 0,
-  });
-
-  const mainContract = Address.parse(fs.readFileSync("main.txt").toString());
-  console.log("contract start ====> " + mainContract);
-
-  const messageBody = beginCell().storeUint(2, 32).endCell(); // op with value 1 (increment)
-
-  const contract = client.open(wallet);
-  const seqno = await contract.getSeqno(); // get the next seqno of our wallet
-  
-  const transfer = contract.createTransfer({
-    seqno,
-    messages: [
-      internal({
-        to: mainContract.toString(),
-        value: '0.01',
-        bounce: false,
-        body: messageBody
-      }),
-    ],
-    secretKey: key.secretKey,
-    sendMode: SendMode.PAY_GAS_SEPARATLY+ SendMode.IGNORE_ERRORS,
-  });
-
-  await client.sendExternalMessage(wallet, transfer);
-}
-
-async function main() {
-  try {
-    await sendMessage();
-    console.log("[delay start]")
-    await delay(10000)
-    console.log("[delay end]")
-    await sendMessage2();
-  } catch (error) {
-    console.log("[sendmsg err]: ", error)
-  }
-}
-
-main();
+  // wallet.methods.transfer({
+  //   secretKey: new TextEncoder().encode(WALLET_SECRET),
+  //   toAddress: params.to,
+  //   amount: params.gasAmount,
+  //   seqno: (await wallet.methods.seqno().call()) ?? 0,
+  //   payload: params.payload,
+  //   sendMode: 3,
+  // });
+};

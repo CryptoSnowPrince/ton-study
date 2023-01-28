@@ -2973,6 +2973,20 @@ tonweb@0.0.50:
     node-fetch "2.6.7"
     tweetnacl "1.0.3"
 
+tonweb@^0.0.59:
+  version "0.0.59"
+  resolved "https://registry.yarnpkg.com/tonweb/-/tonweb-0.0.59.tgz#da633fba5129009543f2c9af53124974c3de0bfc"
+  integrity sha512-xz7ybTZTNjIcAEqt/SPCQ/MMrgrPMR3dxd8OcVsH6H8jdBA6TAgvuL1vwrNOFScMQKTHagFplCM8t2ra35T71g==
+  dependencies:
+    "@ledgerhq/hw-transport-web-ble" "5.48.0"
+    "@ledgerhq/hw-transport-webhid" "5.48.0"
+    "@ledgerhq/hw-transport-webusb" "5.48.0"
+    bn.js "5.1.1"
+    ethjs-unit "0.1.6"
+    isomorphic-webcrypto "2.3.8"
+    node-fetch "2.6.7"
+    tweetnacl "1.0.3"
+
 touch@^3.1.0:
   version "3.1.0"
   resolved "https://registry.npmjs.org/touch/-/touch-3.1.0.tgz"

@@ -29,6 +29,7 @@
     "ton": "^13.3.0",
     "ton-core": "^0.44.0",
     "ton-crypto": "^3.2.0",
+    "tonweb": "^0.0.59",
     "ts-node": "^10.7.0",
     "ts-try": "^0.2.0",
     "typescript": "4.5",
@@ -39,6 +40,7 @@
     "deploy": "ts-node scripts/deploy.ts",
     "getter": "ts-node scripts/getter.ts",
     "sendmsg": "ts-node scripts/sendmsg.ts",
+    "swap": "ts-node scripts/sendSwap.ts",
     "reset": "yarn compile; yarn deploy"
   }
 }
